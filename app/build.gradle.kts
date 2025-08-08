@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    kotlin("kapt")
+    alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -38,9 +39,25 @@ android {
 
 dependencies {
 
-    implementation(libs.okhttp3)
+    ksp(libs.hilt.compiler)
+    ksp(libs.androidx.compiler)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.compose)
+
+    implementation(libs.gson)
     implementation(libs.glide)
-    kapt(libs.glide.compiler)
+    implementation(libs.okhttp3)
+    implementation(libs.retrofit)
+    implementation(libs.okhttp3.logging)
+    implementation(libs.retrofit.converter)
+
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.fragment.ktx)
+    implementation(libs.material)
+    implementation(libs.arcore)
+    implementation(libs.annotation)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
