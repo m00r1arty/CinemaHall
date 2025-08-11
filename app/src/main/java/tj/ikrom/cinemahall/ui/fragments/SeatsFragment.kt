@@ -48,7 +48,6 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
         "STANDARD" to 0
     )
 
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -71,8 +70,8 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.seats.collect { seatsResponse ->
                 seatsResponse?.let { response ->
-                    // Устанавливаем данные кинотеатра
-                    theaterNameText.text = "NullPointer Кинотеатр" // Можно из response
+
+                    theaterNameText.text = "NullPointer Кинотеатр"
                     hallNameText.text = response.hallName
                     freeSeatsCountText.text = "Свободных мест: ${
                         response.seats?.count { it.bookedSeats == 0 } ?: 0
