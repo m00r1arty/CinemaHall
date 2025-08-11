@@ -35,6 +35,9 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -43,6 +46,8 @@ dependencies {
     ksp(libs.androidx.compiler)
     implementation(libs.hilt.android)
     implementation(libs.hilt.compose)
+
+    implementation(libs.chucker.library)
 
     implementation(libs.gson)
     implementation(libs.glide)
