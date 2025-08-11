@@ -16,6 +16,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         app:cardCornerRadius="12dp"
+        app:layout_constraintHeight_percent="0.2"
         app:cardBackgroundColor="@color/orange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,6 +113,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/listCardView"
+        app:cardCornerRadius="12dp"
         android:layout_width="match_parent"
         android:backgroundTint="@color/orange"
         android:layout_height="0dp"
@@ -119,14 +121,14 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/infoCardView">
+        app:layout_constraintTop_toBottomOf="@id/infoCardView"
+        app:layout_constraintBottom_toTopOf="@id/confirmCardView">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="405dp">
 
             <!-- Тут будет кастомный View или RecyclerView с местами -->
             <!-- Важно: для зума и скролла контейнер можно сделать ScrollView с ZoomLayout -->
@@ -135,36 +137,54 @@
 
     </androidx.cardview.widget.CardView>
 
-
-
-    <!-- Нижняя панель с суммой и кнопкой Оплатить -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/bottomPanel"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical|end"
-        android:background="?attr/colorSurface"
-        android:elevation="8dp"
-        android:visibility="gone"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/confirmCardView"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        tools:ignore="MissingConstraints">
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardCornerRadius="12dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView
-            android:id="@+id/totalPrice"
-            android:text="Итого: 0 сомони"
-            android:textAppearance="?attr/textAppearanceHeadline6"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+        <!-- Нижняя панель с суммой и кнопкой Оплатить -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottomPanel"
+            android:padding="16dp"
+            android:background="?attr/colorSurface"
+            android:elevation="8dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            tools:ignore="MissingConstraints">
 
-        <Button
-            android:id="@+id/payButton"
-            android:text="Оплатить"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/totalPrice"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/payButton"
+                app:layout_constraintHorizontal_bias="0"
+                android:gravity="start|center_vertical" />
+
+            <Button
+                android:id="@+id/payButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
