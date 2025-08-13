@@ -1,21 +1,20 @@
 package tj.ikrom.cinemahall.ui.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Button
-import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import tj.ikrom.cinemahall.R
 import tj.ikrom.cinemahall.data.network.model.Seat
+import tj.ikrom.cinemahall.ui.SeatsAdapter
 import tj.ikrom.cinemahall.ui.viewmodel.SeatsViewModel
 
 @AndroidEntryPoint
@@ -26,27 +25,26 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
     private lateinit var totalPriceText: TextView
     private lateinit var payButton: Button
     private lateinit var bottomPanel: View
-    private lateinit var seatsContainer: CardView
     private lateinit var theaterNameText: TextView
     private lateinit var hallNameText: TextView
     private lateinit var freeSeatsCountText: TextView
+    private lateinit var seatsRecyclerView: RecyclerView
 
     private lateinit var vipPriceView: TextView
     private lateinit var comfortPriceView: TextView
     private lateinit var standardPriceView: TextView
 
     // Максимум выбранных мест
-    private val maxSelection = 5
+    private val maxSelectionPlace = 5
+    private val selectedSeats = mutableSetOf<Seat>()
 
-    // Выбранные места
-    private val selectedSeats = mutableSetOf<Seat>() // Seat — модель места
-
-    // Цены по типам (будут установлены из seats_type API)
-    private val pricesMap = mutableMapOf(
+    private val pricesMap: MutableMap<String, Int> = mutableMapOf(
         "VIP" to 0,
         "COMFORT" to 0,
         "STANDARD" to 0
     )
+
+    private lateinit var seatsAdapter: SeatsAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,16 +55,16 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
         totalPriceText = view.findViewById(R.id.totalPrice)
         payButton = view.findViewById(R.id.payButton)
         bottomPanel = view.findViewById(R.id.bottomPanel)
-        seatsContainer = view.findViewById(R.id.listCardView)
+        seatsRecyclerView = view.findViewById(R.id.seatsRecyclerView)
 
         vipPriceView = view.findViewById(R.id.vip_price)
         comfortPriceView = view.findViewById(R.id.comfort_price)
         standardPriceView = view.findViewById(R.id.standard_price)
 
-        // Пока скрываем нижнюю панель
         bottomPanel.visibility = View.GONE
 
-        // Подписываемся на данные
+        setupRecyclerView()
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.seats.collect { seatsResponse ->
                 seatsResponse?.let { response ->
@@ -77,7 +75,6 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
                         response.seats?.count { it.bookedSeats == 0 } ?: 0
                     }"
 
-                    // Устанавливаем цены из seats_type
                     response.seatsType?.forEach { seatType ->
                         seatType.seatType?.let { type ->
                             seatType.price?.let { price ->
@@ -99,51 +96,61 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
         }
     }
 
+    private fun setupRecyclerView() {
+        seatsAdapter = SeatsAdapter(emptyList()) { seat ->
+            onSeatClicked(seat)
+        }
+        seatsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 1)
+        seatsRecyclerView.adapter = seatsAdapter
+    }
+
     private fun updatePriceViews() {
-        vipPriceView.text = pricesMap["VIP"]?.toString() ?: "0"
-        comfortPriceView.text = pricesMap["COMFORT"]?.toString() ?: "0"
-        standardPriceView.text = pricesMap["STANDARD"]?.toString() ?: "0"
+        vipPriceView.text = "VIP: ${pricesMap["VIP"] ?: 0} с"
+        comfortPriceView.text = "COMFORT: ${pricesMap["COMFORT"] ?: 0} с"
+        standardPriceView.text = "STANDARD: ${pricesMap["STANDARD"] ?: 0} с"
     }
 
     private fun updateSeats(seats: List<Seat>) {
-        seatsContainer.removeAllViews()
+        // Сначала сортируем по ряду и типу
+        val sortedSeats = seats
+            .sortedWith(compareBy<Seat> { it.rowNum }
+                .thenBy { seatTypeOrder(it.seatType) }
+                .thenBy { it.place })
 
-        seats.forEach { seat ->
-            val seatView = Button(requireContext()).apply {
-                text = seat.objectTitle ?: ""
+        // Обновляем адаптер
+        seatsAdapter.updateData(sortedSeats)
 
-                background = when (seat.seatType) {
-                    "VIP" -> ContextCompat.getDrawable(context, R.drawable.bg_vip_seat)
-                    "COMFORT" -> ContextCompat.getDrawable(context, R.drawable.bg_comfort_seat)
-                    "STANDARD" -> ContextCompat.getDrawable(context, R.drawable.bg_standard_seat)
-                    else -> ContextCompat.getDrawable(context, android.R.color.transparent)
-                }
+        // Количество колонок = максимальное количество мест в ряду
+        (seatsRecyclerView.layoutManager as? GridLayoutManager)?.spanCount =
+            sortedSeats.groupBy { it.rowNum }.maxOfOrNull { it.value.size } ?: 1
+    }
 
-                isEnabled = seat.bookedSeats == 0
-
-                // Позиционирование
-                x = seat.left?.toFloat() ?: 0f
-                y = seat.top?.toFloat() ?: 0f
-
-                setOnClickListener {
-                    onSeatClicked(seat, this)
-                }
-            }
-            seatsContainer.addView(seatView, FrameLayout.LayoutParams(100, 100))
+    private fun seatTypeOrder(type: String?): Int {
+        return when (type) {
+            "VIP" -> 0
+            "COMFORT" -> 1
+            "STANDARD" -> 2
+            else -> 3
         }
     }
 
-    private fun onSeatClicked(seat: Seat, seatView: View) {
+    private fun getNumberOfColumns(seats: List<Seat>): Int {
+        return seats.groupBy { it.rowNum }.maxOfOrNull { it.value.size } ?: 1
+    }
+
+    private fun onSeatClicked(seat: Seat) {
         if (selectedSeats.contains(seat)) {
             selectedSeats.remove(seat)
-            seatView.alpha = 1f
         } else {
-            if (selectedSeats.size >= maxSelection) {
-                Toast.makeText(requireContext(), "Можно выбрать не более $maxSelection мест", Toast.LENGTH_SHORT).show()
+            if (selectedSeats.size >= maxSelectionPlace) {
+                Toast.makeText(
+                    requireContext(),
+                    "Можно выбрать не более $maxSelectionPlace мест",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return
             }
             selectedSeats.add(seat)
-            seatView.alpha = 0.5f
         }
         updateBottomPanel()
     }
@@ -156,12 +163,11 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
             val totalPrice = selectedSeats.sumOf { seat ->
                 pricesMap[seat.seatType] ?: 0
             }
-            totalPriceText.text = "Итого: $totalPrice somoni"
+            totalPriceText.text = "Итого: $totalPrice сомони"
         }
     }
 
     private fun openPaymentScreen() {
-        // Открыть экран оплаты, передать выбранные места
         Toast.makeText(requireContext(), "Открываем оплату", Toast.LENGTH_SHORT).show()
     }
 }
