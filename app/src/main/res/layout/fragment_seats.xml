@@ -22,7 +22,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/infoPanel"
             android:orientation="vertical"
             android:padding="16dp"
@@ -33,23 +33,54 @@
 
             <TextView
                 android:id="@+id/theaterName"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Имя Кинотеатра"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/hallName"
+                app:layout_constraintTop_toBottomOf="@id/theaterName"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Зал 1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/freeSeatsCount"
+                app:layout_constraintTop_toBottomOf="@id/hallName"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Свободных мест: 10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/statusCardCinema"
+                android:backgroundTint="@color/blue_ordinary"
+                app:layout_constraintTop_toBottomOf="@id/freeSeatsCount"
+                app:cardCornerRadius="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/statusCinema"
+                    android:layout_margin="4dp"
+                    android:text="В процессе"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </androidx.cardview.widget.CardView>
 
             <LinearLayout
                 android:id="@+id/seatTypesPrices"
                 android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/statusCardCinema"
+                app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp">
@@ -68,6 +99,7 @@
 
                     <TextView
                         android:id="@+id/vip_price"
+                        android:text="VIP: 8000 c"
                         android:layout_marginStart="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -86,13 +118,13 @@
 
                     <TextView
                         android:id="@+id/comfort_price"
+                        android:text="COMFORT: 6000 c"
                         android:layout_marginStart="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginBottom="4dp"
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -104,12 +136,13 @@
 
                     <TextView
                         android:id="@+id/standard_price"
+                        android:text="STANDARD: 4000 c"
                         android:layout_marginStart="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
     <!-- Схема зала -->
@@ -158,7 +191,6 @@
             android:id="@+id/bottomPanel"
             android:background="?attr/colorSurface"
             android:elevation="8dp"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:ignore="MissingConstraints">
@@ -180,7 +212,9 @@
             <Button
                 android:id="@+id/payButton"
                 android:text="Оплатить"
+                android:textColor="@color/black"
                 android:textSize="14.sp"
+                android:layout_marginEnd="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -28,6 +28,7 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
     private lateinit var theaterNameText: TextView
     private lateinit var hallNameText: TextView
     private lateinit var freeSeatsCountText: TextView
+    private lateinit var statusCinemaText: TextView
     private lateinit var seatsRecyclerView: RecyclerView
 
     private lateinit var vipPriceView: TextView
@@ -50,6 +51,7 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
         super.onViewCreated(view, savedInstanceState)
 
         theaterNameText = view.findViewById(R.id.theaterName)
+        statusCinemaText = view.findViewById(R.id.statusCinema)
         hallNameText = view.findViewById(R.id.hallName)
         freeSeatsCountText = view.findViewById(R.id.freeSeatsCount)
         totalPriceText = view.findViewById(R.id.totalPrice)
@@ -69,11 +71,12 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
             viewModel.seats.collect { seatsResponse ->
                 seatsResponse?.let { response ->
 
-                    theaterNameText.text = "NullPointer Кинотеатр"
+                    theaterNameText.text = "Кинотеатр \"NullPointer\""
                     hallNameText.text = response.hallName
                     freeSeatsCountText.text = "Свободных мест: ${
                         response.seats?.count { it.bookedSeats == 0 } ?: 0
                     }"
+                    statusCinemaText.text = response.hasStartedText
 
                     response.seatsType?.forEach { seatType ->
                         seatType.seatType?.let { type ->
@@ -105,9 +108,9 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
     }
 
     private fun updatePriceViews() {
-        vipPriceView.text = "VIP: ${pricesMap["VIP"] ?: 0} с"
-        comfortPriceView.text = "COMFORT: ${pricesMap["COMFORT"] ?: 0} с"
-        standardPriceView.text = "STANDARD: ${pricesMap["STANDARD"] ?: 0} с"
+        vipPriceView.text = "VIP: ${pricesMap["VIP"] ?: 0} TJS"
+        comfortPriceView.text = "COMFORT: ${pricesMap["COMFORT"] ?: 0} TJS"
+        standardPriceView.text = "STANDARD: ${pricesMap["STANDARD"] ?: 0} TJS"
     }
 
     private fun updateSeats(seats: List<Seat>) {
