@@ -100,7 +100,7 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
         seatsAdapter = SeatsAdapter(emptyList()) { seat ->
             onSeatClicked(seat)
         }
-        seatsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 1)
+        seatsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 10)
         seatsRecyclerView.adapter = seatsAdapter
     }
 
@@ -111,18 +111,25 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
     }
 
     private fun updateSeats(seats: List<Seat>) {
-        // Сначала сортируем по ряду и типу
-        val sortedSeats = seats
-            .sortedWith(compareBy<Seat> { it.rowNum }
-                .thenBy { seatTypeOrder(it.seatType) }
-                .thenBy { it.place })
+        val groupedSeats = seats.groupBy { it.rowNum }
+            .toSortedMap(compareBy { it?.toIntOrNull() ?: 0 }) // ряды по порядку
 
-        // Обновляем адаптер
+        // Определяем максимальное количество мест в ряду
+        val maxPlacesInRow = groupedSeats.maxOfOrNull { it.value.size } ?: 1
+        (seatsRecyclerView.layoutManager as? GridLayoutManager)?.spanCount = maxPlacesInRow
+
+        // Создаем список для адаптера с “фиктивными” пустыми местами, чтобы сетка не съезжала
+        val sortedSeats = mutableListOf<Seat>()
+        groupedSeats.forEach { (_, rowSeats) ->
+            val sortedRow = rowSeats.sortedBy { it.place }.toMutableList()
+            // Добавляем пустые места, если в ряду меньше, чем max
+            while (sortedRow.size < maxPlacesInRow) {
+                sortedRow.add(Seat(null, null, "", "")) // пустой объект Seat
+            }
+            sortedSeats.addAll(sortedRow)
+        }
+
         seatsAdapter.updateData(sortedSeats)
-
-        // Количество колонок = максимальное количество мест в ряду
-        (seatsRecyclerView.layoutManager as? GridLayoutManager)?.spanCount =
-            sortedSeats.groupBy { it.rowNum }.maxOfOrNull { it.value.size } ?: 1
     }
 
     private fun seatTypeOrder(type: String?): Int {
@@ -132,10 +139,6 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
             "STANDARD" -> 2
             else -> 3
         }
-    }
-
-    private fun getNumberOfColumns(seats: List<Seat>): Int {
-        return seats.groupBy { it.rowNum }.maxOfOrNull { it.value.size } ?: 1
     }
 
     private fun onSeatClicked(seat: Seat) {

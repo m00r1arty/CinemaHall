@@ -2,7 +2,6 @@ package tj.ikrom.cinemahall.ui
 
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import tj.ikrom.cinemahall.R
