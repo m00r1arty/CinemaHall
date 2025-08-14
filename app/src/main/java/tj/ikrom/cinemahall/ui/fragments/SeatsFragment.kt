@@ -1,7 +1,6 @@
 package tj.ikrom.cinemahall.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Button
@@ -118,38 +117,19 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
         val groupedSeats = seats.groupBy { it.rowNum }
             .toSortedMap(compareBy { it?.toIntOrNull() ?: 0 })
 
-        val displaySeats = mutableListOf<Seat>()
+        val maxPlacesInRow = groupedSeats.maxOfOrNull { it.value.size + 1 } ?: 1
+        (seatsRecyclerView.layoutManager as? GridLayoutManager)?.spanCount = maxPlacesInRow
 
-        groupedSeats.forEach { (rowNum, rowSeats) ->
-            val sortedRow: MutableList<Seat> = rowSeats.sortedBy { it.place }.toMutableList()
-
-            // Добавляем в начало номер ряда
-            displaySeats.add(
-                Seat(
-                    rowNum = rowNum,
-                    objectTitle = "$rowNum:",
-                    seatType = "label"
-                )
-            )
-
-            // Добавляем сами места
-            displaySeats.addAll(sortedRow)
-
-            // Добавляем в конец номер ряда
-            displaySeats.add(
-                Seat(
-                    rowNum = rowNum,
-                    objectTitle = "$rowNum:",
-                    seatType = "label"
-                )
-            )
+        val sortedSeats = mutableListOf<Seat>()
+        groupedSeats.forEach { (_, rowSeats) ->
+            val sortedRow = rowSeats.sortedBy { it.place }.toMutableList()
+            while (sortedRow.size < maxPlacesInRow) {
+                sortedRow.add(Seat(null, null, "", ""))
+            }
+            sortedSeats.addAll(sortedRow)
         }
 
-        // Здесь spanCount равен макс. длине ряда (места + 2 метки по краям)
-        (seatsRecyclerView.layoutManager as? GridLayoutManager)?.spanCount =
-            groupedSeats.maxOfOrNull { it.value.size + 2 } ?: 1
-
-        seatsAdapter.updateData(displaySeats)
+        seatsAdapter.updateData(sortedSeats)
     }
 
     private fun onSeatClicked(seat: Seat) {
