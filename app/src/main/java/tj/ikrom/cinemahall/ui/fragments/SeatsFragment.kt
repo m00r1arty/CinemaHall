@@ -1,6 +1,7 @@
 package tj.ikrom.cinemahall.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Button
@@ -103,7 +104,7 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
         seatsAdapter = SeatsAdapter(emptyList()) { seat ->
             onSeatClicked(seat)
         }
-        seatsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 10)
+        seatsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         seatsRecyclerView.adapter = seatsAdapter
     }
 
@@ -115,24 +116,41 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
 
     private fun updateSeats(seats: List<Seat>) {
         val groupedSeats = seats.groupBy { it.rowNum }
-            .toSortedMap(compareBy { it?.toIntOrNull() ?: 0 }) // ряды по порядку
+            .toSortedMap(compareBy { it?.toIntOrNull() ?: 0 }) // сортируем ряды
 
-        // Определяем максимальное количество мест в ряду
-        val maxPlacesInRow = groupedSeats.maxOfOrNull { it.value.size } ?: 1
-        (seatsRecyclerView.layoutManager as? GridLayoutManager)?.spanCount = maxPlacesInRow
+        val displaySeats = mutableListOf<Seat>()
 
-        // Создаем список для адаптера с “фиктивными” пустыми местами, чтобы сетка не съезжала
-        val sortedSeats = mutableListOf<Seat>()
-        groupedSeats.forEach { (_, rowSeats) ->
-            val sortedRow = rowSeats.sortedBy { it.place }.toMutableList()
-            // Добавляем пустые места, если в ряду меньше, чем max
-            while (sortedRow.size < maxPlacesInRow) {
-                sortedRow.add(Seat(null, null, "", "")) // пустой объект Seat
-            }
-            sortedSeats.addAll(sortedRow)
+        groupedSeats.forEach { (rowNum, rowSeats) ->
+            val sortedRow: MutableList<Seat> = rowSeats.sortedBy { it.place }.toMutableList()
+
+            // Добавляем в начало номер ряда
+            displaySeats.add(
+                Seat(
+                    rowNum = rowNum,
+                    objectTitle = "$rowNum:",
+                    seatType = "label"
+                )
+            )
+
+            // Добавляем сами места
+            displaySeats.addAll(sortedRow)
+
+            // Добавляем в конец номер ряда
+            displaySeats.add(
+                Seat(
+                    rowNum = rowNum,
+                    objectTitle = "$rowNum:",
+                    seatType = "label"
+                )
+            )
+            Log.i("Seats", sortedRow.toString())
         }
 
-        seatsAdapter.updateData(sortedSeats)
+        // Здесь spanCount равен макс. длине ряда (места + 2 метки по краям)
+        (seatsRecyclerView.layoutManager as? GridLayoutManager)?.spanCount =
+            groupedSeats.maxOfOrNull { it.value.size + 2 } ?: 1
+
+        seatsAdapter.updateData(displaySeats)
     }
 
     private fun seatTypeOrder(type: String?): Int {

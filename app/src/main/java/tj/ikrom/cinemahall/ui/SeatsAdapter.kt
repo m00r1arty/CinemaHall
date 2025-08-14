@@ -29,14 +29,22 @@ class SeatsAdapter(
         holder.button.apply {
             textSize = 8f
             text = seat.objectTitle ?: ""
-            background = when (seat.seatType) {
-                "VIP" -> ContextCompat.getDrawable(context, R.drawable.bg_vip_seat)
-                "COMFORT" -> ContextCompat.getDrawable(context, R.drawable.bg_comfort_seat)
-                "STANDARD" -> ContextCompat.getDrawable(context, R.drawable.bg_standard_seat)
-                else -> ContextCompat.getDrawable(context, android.R.color.transparent)
+
+            if (seat.seatType == "label") {
+                // Это метка ряда
+                background = null
+                isEnabled = false
+            } else {
+                // Это обычное место
+                background = when (seat.seatType) {
+                    "VIP" -> ContextCompat.getDrawable(context, R.drawable.bg_vip_seat)
+                    "COMFORT" -> ContextCompat.getDrawable(context, R.drawable.bg_comfort_seat)
+                    "STANDARD" -> ContextCompat.getDrawable(context, R.drawable.bg_standard_seat)
+                    else -> ContextCompat.getDrawable(context, android.R.color.transparent)
+                }
+                isEnabled = seat.bookedSeats == 0
+                setOnClickListener { onSeatClick(seat) }
             }
-            isEnabled = seat.bookedSeats == 0
-            setOnClickListener { onSeatClick(seat) }
         }
     }
 
