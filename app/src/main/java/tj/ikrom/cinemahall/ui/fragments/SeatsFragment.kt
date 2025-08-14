@@ -116,7 +116,7 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
 
     private fun updateSeats(seats: List<Seat>) {
         val groupedSeats = seats.groupBy { it.rowNum }
-            .toSortedMap(compareBy { it?.toIntOrNull() ?: 0 }) // сортируем ряды
+            .toSortedMap(compareBy { it?.toIntOrNull() ?: 0 })
 
         val displaySeats = mutableListOf<Seat>()
 
@@ -143,7 +143,6 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
                     seatType = "label"
                 )
             )
-            Log.i("Seats", sortedRow.toString())
         }
 
         // Здесь spanCount равен макс. длине ряда (места + 2 метки по краям)
@@ -151,15 +150,6 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
             groupedSeats.maxOfOrNull { it.value.size + 2 } ?: 1
 
         seatsAdapter.updateData(displaySeats)
-    }
-
-    private fun seatTypeOrder(type: String?): Int {
-        return when (type) {
-            "VIP" -> 0
-            "COMFORT" -> 1
-            "STANDARD" -> 2
-            else -> 3
-        }
     }
 
     private fun onSeatClicked(seat: Seat) {

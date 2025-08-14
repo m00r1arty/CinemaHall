@@ -2,6 +2,7 @@ package tj.ikrom.cinemahall.ui
 
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import tj.ikrom.cinemahall.R
@@ -35,13 +36,21 @@ class SeatsAdapter(
                 background = null
                 isEnabled = false
             } else {
-                // Это обычное место
+
                 background = when (seat.seatType) {
                     "VIP" -> ContextCompat.getDrawable(context, R.drawable.bg_vip_seat)
                     "COMFORT" -> ContextCompat.getDrawable(context, R.drawable.bg_comfort_seat)
                     "STANDARD" -> ContextCompat.getDrawable(context, R.drawable.bg_standard_seat)
                     else -> ContextCompat.getDrawable(context, android.R.color.transparent)
                 }
+                setTextColor(
+                    when (seat.seatType) {
+                        "VIP" -> ContextCompat.getColor(context, R.color.black)
+                        "COMFORT" -> ContextCompat.getColor(context, R.color.black)
+                        "STANDARD" -> ContextCompat.getColor(context, R.color.black)
+                        else -> ContextCompat.getColor(context, R.color.transparent)
+                    }
+                )
                 isEnabled = seat.bookedSeats == 0
                 setOnClickListener { onSeatClick(seat) }
             }
