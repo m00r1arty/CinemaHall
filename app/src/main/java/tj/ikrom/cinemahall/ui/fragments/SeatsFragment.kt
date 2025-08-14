@@ -27,6 +27,7 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
 
     private lateinit var totalPriceText: TextView
     private lateinit var payButton: Button
+    private lateinit var historyButton: Button
     private lateinit var bottomPanel: View
     private lateinit var theaterNameText: TextView
     private lateinit var hallNameText: TextView
@@ -58,6 +59,7 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
         freeSeatsCountText = view.findViewById(R.id.freeSeatsCount)
         totalPriceText = view.findViewById(R.id.totalPrice)
         payButton = view.findViewById(R.id.payButton)
+        historyButton = view.findViewById(R.id.historyButton)
         bottomPanel = view.findViewById(R.id.bottomPanel)
         seatsRecyclerView = view.findViewById(R.id.seatsRecyclerView)
 
@@ -95,8 +97,12 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
         }
 
         viewModel.loadSeats()
+        historyButton.setOnClickListener {
+            val navController = Navigation.findNavController(view)
+            navController.navigate(R.id.action_seats_to_payment)
+        }
 
-        payButton.setOnClickListener { view ->
+        payButton.setOnClickListener {
             if (selectedSeats.isEmpty()) {
                 Toast.makeText(requireContext(), "Сначала выберите места", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
