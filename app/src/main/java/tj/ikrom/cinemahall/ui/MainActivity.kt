@@ -5,6 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import tj.ikrom.cinemahall.R
+import tj.ikrom.cinemahall.ui.fragments.PaymentFragment
 import tj.ikrom.cinemahall.ui.fragments.SeatsFragment
 
 @AndroidEntryPoint
@@ -20,5 +21,9 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.main, SeatsFragment())
             .commit()
 
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main, PaymentFragment())
+            .addToBackStack(null)
+            .commit()
     }
 }

@@ -9,6 +9,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,6 +97,8 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
         viewModel.loadSeats()
 
         payButton.setOnClickListener {
+            val navController = Navigation.findNavController(context, R.id.nav_host_fragment)
+            navController.navigate(R.id.action_seats_to_payment)
             openPaymentScreen()
         }
     }
@@ -163,6 +167,7 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
     }
 
     private fun openPaymentScreen() {
+
         Toast.makeText(requireContext(), "Открываем оплату", Toast.LENGTH_SHORT).show()
     }
 }

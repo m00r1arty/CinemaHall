@@ -47,6 +47,10 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.compose)
 
+    implementation(libs.navigation.ui)
+    implementation(libs.navigation.ktx)
+    implementation(libs.navigation.fragment)
+
     implementation(libs.chucker.library)
 
     implementation(libs.gson)
