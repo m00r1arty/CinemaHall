@@ -1,6 +1,7 @@
 package tj.ikrom.cinemahall.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Button
@@ -35,9 +36,8 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
     private lateinit var comfortPriceView: TextView
     private lateinit var standardPriceView: TextView
 
-    // Максимум выбранных мест
     private val maxSelectionPlace = 5
-    private val selectedSeats: MutableSet<Seat> = mutableSetOf<Seat>()
+    private val selectedSeats = mutableSetOf<Seat>()
 
     private val pricesMap: MutableMap<String, Int> = mutableMapOf(
         "VIP" to 0,
@@ -102,6 +102,7 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
     private fun setupRecyclerView() {
         seatsAdapter = SeatsAdapter(emptyList()) { seat: Seat ->
             onSeatClicked(seat)
+            Log.i("Selected Seats", selectedSeats.toString())
         }
         seatsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         seatsRecyclerView.adapter = seatsAdapter
