@@ -1,5 +1,6 @@
 package tj.ikrom.cinemahall.ui.fragments
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,12 +11,12 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import tj.ikrom.cinemahall.R
+import tj.ikrom.cinemahall.data.database.entity.PaymentEntity
 import tj.ikrom.cinemahall.data.network.model.Seat
 import tj.ikrom.cinemahall.ui.SeatsAdapter
 import tj.ikrom.cinemahall.ui.viewmodel.SeatsViewModel
@@ -97,9 +98,21 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
         viewModel.loadSeats()
 
         payButton.setOnClickListener {
-            val navController = Navigation.findNavController(context, R.id.nav_host_fragment)
+            if (selectedSeats.isEmpty()) {
+                Toast.makeText(requireContext(), "Сначала выберите места", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val paymentEntity = PaymentEntity(
+                cinemaName = theaterNameText.text.toString(),
+                hall = hallNameText.text.toString(),
+                seats = selectedSeats.toList()
+            )
+
+            viewModel.insertPayment(paymentEntity)
+
+            val navController = Navigation.findNavController(context as Activity, R.id.nav_host_fragment)
             navController.navigate(R.id.action_seats_to_payment)
-            openPaymentScreen()
         }
     }
 
@@ -167,7 +180,6 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
     }
 
     private fun openPaymentScreen() {
-
         Toast.makeText(requireContext(), "Открываем оплату", Toast.LENGTH_SHORT).show()
     }
 }

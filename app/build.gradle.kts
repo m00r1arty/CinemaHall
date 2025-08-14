@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "tj.ikrom.cinemahall"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "tj.ikrom.cinemahall"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -51,10 +51,13 @@ dependencies {
     implementation(libs.navigation.ktx)
     implementation(libs.navigation.fragment)
 
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+    implementation(libs.room.runtime)
+
     implementation(libs.chucker.library)
 
     implementation(libs.gson)
-    implementation(libs.glide)
     implementation(libs.okhttp3)
     implementation(libs.retrofit)
     implementation(libs.okhttp3.logging)

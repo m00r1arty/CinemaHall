@@ -1,11 +1,13 @@
 package tj.ikrom.cinemahall.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import tj.ikrom.cinemahall.data.database.entity.PaymentEntity
 import tj.ikrom.cinemahall.data.network.model.SeatsResponse
 import tj.ikrom.cinemahall.domain.repositories.SeatsRep
 import javax.inject.Inject
@@ -24,4 +26,15 @@ class SeatsViewModel @Inject constructor(
             }
         }
     }
+
+    fun insertPayment(paymentEntity: PaymentEntity) {
+        viewModelScope.launch {
+            try {
+                seatsRep.insertPayment(paymentEntity)
+            } catch (e: Exception) {
+                Log.e("SeatsViewModel", "Error inserting payment: ${e.localizedMessage}")
+            }
+        }
+    }
+
 }
