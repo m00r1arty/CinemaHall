@@ -10,5 +10,6 @@ interface SeatsRep {
 
     suspend fun insertPayment(paymentEntity: PaymentEntity)
 
+    fun getAllPayment(): Flow<List<PaymentEntity>>
 
 }

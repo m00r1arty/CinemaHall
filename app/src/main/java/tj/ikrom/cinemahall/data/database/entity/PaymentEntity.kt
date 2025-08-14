@@ -13,4 +13,5 @@ data class PaymentEntity(
     val hall: String,
     @TypeConverters(PaymentConverter::class)
     val seats: List<Seat>,
+    val totalPrice: String,
 )

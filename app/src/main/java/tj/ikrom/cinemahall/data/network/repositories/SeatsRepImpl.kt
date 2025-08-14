@@ -36,4 +36,8 @@ class SeatsRepImpl @Inject constructor(
             Log.e("InsertInvoice", message)
         }
     }
+
+    override fun getAllPayment(): Flow<List<PaymentEntity>> = flow {
+        emit(paymentDao.getAllPayment())
+    }.flowOn(IO)
 }

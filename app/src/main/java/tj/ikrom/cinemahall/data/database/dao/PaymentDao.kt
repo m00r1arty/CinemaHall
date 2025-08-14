@@ -18,5 +18,5 @@ interface PaymentDao {
     fun deletePayment(salomEntity: PaymentEntity)
 
     @Query("SELECT * FROM payment;")
-    fun getAllPayment(): Flow<List<PaymentEntity>>
+    fun getAllPayment(): List<PaymentEntity>
 }

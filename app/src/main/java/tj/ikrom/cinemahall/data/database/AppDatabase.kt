@@ -11,7 +11,7 @@ import tj.ikrom.cinemahall.data.database.entity.PaymentEntity
 import tj.ikrom.cinemahall.data.database.entity.converter.PaymentConverter
 
 @Database(
-    version = 1,
+    version = 2,
     exportSchema = false,
     entities = [
         PaymentEntity::class,
