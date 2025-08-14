@@ -38,7 +38,7 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
 
     // Максимум выбранных мест
     private val maxSelectionPlace = 5
-    private val selectedSeats = mutableSetOf<Seat>()
+    private val selectedSeats: MutableSet<Seat> = mutableSetOf<Seat>()
 
     private val pricesMap: MutableMap<String, Int> = mutableMapOf(
         "VIP" to 0,
@@ -101,7 +101,7 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
     }
 
     private fun setupRecyclerView() {
-        seatsAdapter = SeatsAdapter(emptyList()) { seat ->
+        seatsAdapter = SeatsAdapter(emptyList()) { seat: Seat ->
             onSeatClicked(seat)
         }
         seatsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
