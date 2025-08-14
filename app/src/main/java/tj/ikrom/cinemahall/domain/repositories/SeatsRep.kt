@@ -12,4 +12,6 @@ interface SeatsRep {
 
     fun getAllPayment(): Flow<List<PaymentEntity>>
 
+    suspend fun deletePayment(paymentEntity: List<PaymentEntity>)
+
 }

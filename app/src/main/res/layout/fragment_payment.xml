@@ -7,7 +7,6 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Пример текста сверху -->
     <androidx.cardview.widget.CardView
         android:id="@+id/infoCardView"
         android:layout_width="match_parent"
@@ -30,8 +29,29 @@
             android:elevation="4dp">
 
             <TextView
-                android:id="@+id/theaterName"
+                android:id="@+id/tranche"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Транш"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:textSize="12sp"
+                android:id="@+id/clearTranche"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Очистить"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+            <TextView
+                android:id="@+id/theaterName"
+                app:layout_constraintTop_toBottomOf="@id/tranche"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="Имя Кинотеатра"
                 android:textAppearance="?attr/textAppearanceHeadline6"
@@ -46,33 +66,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/freeSeatsCount"
-                app:layout_constraintTop_toBottomOf="@id/hallName"
-                app:layout_constraintStart_toStartOf="parent"
-                android:text="Свободных мест: 10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/statusCardCinema"
-                android:backgroundTint="@color/blue_ordinary"
-                app:layout_constraintTop_toBottomOf="@id/freeSeatsCount"
-                app:cardCornerRadius="4dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal">
-
-                <TextView
-                    android:id="@+id/statusCinema"
-                    android:layout_margin="4dp"
-                    android:text="В процессе"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-            </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
@@ -91,14 +84,18 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/payButton"
-        app:layout_constraintTop_toBottomOf="@+id/textTitle"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        app:layout_constraintBottom_toTopOf="@+id/homeButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textTitle"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/payButton"
+        android:id="@+id/homeButton"
+        app:layout_constraintCircleRadius="12dp"
+        android:background="@color/primaryGray"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"

@@ -25,7 +25,9 @@ class PaymentAdapter : RecyclerView.Adapter<PaymentAdapter.PaymentViewHolder>() 
 
     override fun onBindViewHolder(holder: PaymentViewHolder, position: Int) {
         val payment = payments[position]
-        holder.textView.text = "Cinema: ${payment.cinemaName}, Hall: ${payment.hall}, Seats: ${payment.seats.joinToString()}"
+        payment.seats.forEach { seat ->
+            holder.textView.text = "Сумма: ${payment.totalPrice} Место: ${seat.objectDescription} "
+        }
     }
 
     override fun getItemCount(): Int = payments.size

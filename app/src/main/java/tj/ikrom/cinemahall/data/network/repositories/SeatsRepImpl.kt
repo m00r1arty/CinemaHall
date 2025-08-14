@@ -40,4 +40,9 @@ class SeatsRepImpl @Inject constructor(
     override fun getAllPayment(): Flow<List<PaymentEntity>> = flow {
         emit(paymentDao.getAllPayment())
     }.flowOn(IO)
+
+    override suspend fun deletePayment(paymentEntity: List<PaymentEntity>) {
+        paymentDao.deletePayment(paymentEntity)
+    }
+
 }

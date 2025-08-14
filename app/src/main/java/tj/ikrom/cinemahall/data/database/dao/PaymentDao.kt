@@ -15,7 +15,7 @@ interface PaymentDao {
     suspend fun insertPayment(salomEntity: PaymentEntity)
 
     @Delete
-    fun deletePayment(salomEntity: PaymentEntity)
+    fun deletePayment(paymentEntity: List<PaymentEntity>)
 
     @Query("SELECT * FROM payment;")
     fun getAllPayment(): List<PaymentEntity>

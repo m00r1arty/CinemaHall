@@ -17,7 +17,11 @@
     <fragment
         android:id="@+id/paymentFragment"
         android:name="tj.ikrom.cinemahall.ui.fragments.PaymentFragment"
-        android:label="Payment" />
+        android:label="Payment">
+        <action
+            android:id="@+id/action_payment_to_seats"
+            app:destination="@id/seatsFragment" />
+    </fragment>
 
 
 </navigation>

@@ -4,15 +4,20 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import tj.ikrom.cinemahall.R
+import tj.ikrom.cinemahall.data.database.entity.PaymentEntity
 import tj.ikrom.cinemahall.ui.PaymentAdapter
 import tj.ikrom.cinemahall.ui.viewmodel.PaymentViewModel
 
@@ -22,7 +27,12 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     private val viewModel: PaymentViewModel by viewModels()
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var cinemaName: TextView
+    private lateinit var hallName: TextView
+    private lateinit var tranche: TextView
+    private lateinit var clearTranche: TextView
     private lateinit var adapter: PaymentAdapter
+    private lateinit var homeButton: Button
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,14 +41,34 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = PaymentAdapter()
         recyclerView.adapter = adapter
+        cinemaName = view.findViewById(R.id.theaterName)
+        hallName = view.findViewById(R.id.hallName)
+        tranche = view.findViewById(R.id.tranche)
+        clearTranche = view.findViewById(R.id.clearTranche)
+        homeButton = view.findViewById(R.id.homeButton)
 
+        tranche.text = "Транзакции"
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allPayments.collect { payments ->
+                viewModel.allPayments.collect { payments: List<PaymentEntity> ->
+                    clearTranche.setOnClickListener {
+                        Toast.makeText(requireContext(), "Очищено", Toast.LENGTH_SHORT).show()
+                        viewModel.deletePayment(payments)
+                    }
+
+                    payments.forEach {
+                        cinemaName.text = it.cinemaName
+                        hallName.text = it.hall
+                    }
+
                     Log.i("Payment", payments.toString())
                     adapter.submitList(payments)
                 }
             }
+        }
+        homeButton.setOnClickListener {
+            val navController = Navigation.findNavController(view)
+            navController.navigate(R.id.action_payment_to_seats)
         }
     }
 }
