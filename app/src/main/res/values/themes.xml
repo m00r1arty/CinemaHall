@@ -1,10 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.CinemaHall" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Base.Theme.CinemaHall" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@color/orange</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+
+        <!-- Добавляем фон приложения -->
+        <item name="android:windowBackground">@color/background_project</item>
     </style>
 
     <style name="Theme.CinemaHall" parent="Base.Theme.CinemaHall" />
