@@ -97,7 +97,7 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
 
         viewModel.loadSeats()
 
-        payButton.setOnClickListener {
+        payButton.setOnClickListener { view ->
             if (selectedSeats.isEmpty()) {
                 Toast.makeText(requireContext(), "Сначала выберите места", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -111,7 +111,8 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
 
             viewModel.insertPayment(paymentEntity)
 
-            val navController = Navigation.findNavController(context as Activity, R.id.nav_host_fragment)
+            // Навигация через кнопку
+            val navController = Navigation.findNavController(view)
             navController.navigate(R.id.action_seats_to_payment)
         }
     }

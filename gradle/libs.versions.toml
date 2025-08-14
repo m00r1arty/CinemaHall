@@ -61,7 +61,7 @@ gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
 # Navigation
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "nav-version" }
-navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "nav-version" }
+navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "nav-version" }
 navigation-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "nav-version" }
 # Room
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room_version" }
