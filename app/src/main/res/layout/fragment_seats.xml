@@ -212,8 +212,9 @@
             <Button
                 android:id="@+id/payButton"
                 android:text="Оплатить"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="14.sp"
+                android:backgroundTint="@color/green"
                 android:layout_marginEnd="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
