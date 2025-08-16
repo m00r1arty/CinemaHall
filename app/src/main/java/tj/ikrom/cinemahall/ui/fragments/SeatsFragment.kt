@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import tj.ikrom.cinemahall.R
 import tj.ikrom.cinemahall.data.database.entity.PaymentEntity
 import tj.ikrom.cinemahall.data.network.model.Seat
-import tj.ikrom.cinemahall.ui.SeatsAdapter
+import tj.ikrom.cinemahall.ui.adapter.SeatsAdapter
 import tj.ikrom.cinemahall.ui.viewmodel.SeatsViewModel
 
 @AndroidEntryPoint

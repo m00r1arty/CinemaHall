@@ -1,9 +1,8 @@
-package tj.ikrom.cinemahall.ui
+package tj.ikrom.cinemahall.ui.adapter
 
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import tj.ikrom.cinemahall.R

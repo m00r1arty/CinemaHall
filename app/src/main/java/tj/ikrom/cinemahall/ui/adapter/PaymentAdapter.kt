@@ -1,4 +1,4 @@
-package tj.ikrom.cinemahall.ui
+package tj.ikrom.cinemahall.ui.adapter
 
 import android.view.ViewGroup
 import android.widget.TextView
@@ -25,9 +25,9 @@ class PaymentAdapter : RecyclerView.Adapter<PaymentAdapter.PaymentViewHolder>() 
 
     override fun onBindViewHolder(holder: PaymentViewHolder, position: Int) {
         val payment = payments[position]
-        payment.seats.forEach { seat ->
-            holder.textView.text = "Сумма: ${payment.totalPrice} Место: ${seat.objectDescription} "
-        }
+        val seatsText = payment.seats
+            .joinToString(separator = "\n") { it.objectDescription.toString() }
+        holder.textView.text = "Сумма: ${payment.totalPrice} | Места: $seatsText"
     }
 
     override fun getItemCount(): Int = payments.size

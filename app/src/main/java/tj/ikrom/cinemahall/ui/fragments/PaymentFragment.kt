@@ -18,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import tj.ikrom.cinemahall.R
 import tj.ikrom.cinemahall.data.database.entity.PaymentEntity
-import tj.ikrom.cinemahall.ui.PaymentAdapter
+import tj.ikrom.cinemahall.ui.adapter.PaymentAdapter
 import tj.ikrom.cinemahall.ui.viewmodel.PaymentViewModel
 
 @AndroidEntryPoint
