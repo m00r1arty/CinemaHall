@@ -48,19 +48,21 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         homeButton = view.findViewById(R.id.homeButton)
 
         tranche.text = "Транзакции"
+
+        clearTranche.setOnClickListener {
+            Toast.makeText(requireContext(), "Очищено", Toast.LENGTH_SHORT).show()
+            viewModel.deletePayment(adapter.currentList) // удаляем актуальные
+            adapter.submitList(emptyList()) // сразу очищаем UI
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.allPayments.collect { payments: List<PaymentEntity> ->
-                    clearTranche.setOnClickListener {
-                        Toast.makeText(requireContext(), "Очищено", Toast.LENGTH_SHORT).show()
-                        viewModel.deletePayment(payments)
+                    if (payments.isNotEmpty()) {
+                        // можно взять данные из первого платежа для заголовков
+                        cinemaName.text = payments.first().cinemaName
+                        hallName.text = payments.first().hall
                     }
-
-                    payments.forEach {
-                        cinemaName.text = it.cinemaName
-                        hallName.text = it.hall
-                    }
-
                     Log.i("Payment", payments.toString())
                     adapter.submitList(payments)
                 }

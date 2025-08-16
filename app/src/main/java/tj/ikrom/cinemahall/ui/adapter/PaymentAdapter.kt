@@ -2,12 +2,20 @@ package tj.ikrom.cinemahall.ui.adapter
 
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import tj.ikrom.cinemahall.data.database.entity.PaymentEntity
 
-class PaymentAdapter : RecyclerView.Adapter<PaymentAdapter.PaymentViewHolder>() {
+class PaymentAdapter : ListAdapter<PaymentEntity, PaymentAdapter.PaymentViewHolder>(DiffCallback) {
 
-    private val payments = mutableListOf<PaymentEntity>()
+    object DiffCallback : DiffUtil.ItemCallback<PaymentEntity>() {
+        override fun areItemsTheSame(oldItem: PaymentEntity, newItem: PaymentEntity) =
+            oldItem.id == newItem.id
+
+        override fun areContentsTheSame(oldItem: PaymentEntity, newItem: PaymentEntity) =
+            oldItem == newItem
+    }
 
     inner class PaymentViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
 
@@ -24,17 +32,8 @@ class PaymentAdapter : RecyclerView.Adapter<PaymentAdapter.PaymentViewHolder>() 
     }
 
     override fun onBindViewHolder(holder: PaymentViewHolder, position: Int) {
-        val payment = payments[position]
-        val seatsText = payment.seats
-            .joinToString(separator = "\n") { it.objectDescription.toString() }
-        holder.textView.text = "Сумма: ${payment.totalPrice} | Места: $seatsText"
-    }
-
-    override fun getItemCount(): Int = payments.size
-
-    fun submitList(list: List<PaymentEntity>) {
-        payments.clear()
-        payments.addAll(list)
-        notifyDataSetChanged()
+        val payment = getItem(position)
+        val seatsText = payment.seats.joinToString("\n") { it.objectDescription.toString() }
+        holder.textView.text = "Сумма: ${payment.totalPrice} | Места:\n$seatsText"
     }
 }
