@@ -5,15 +5,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import tj.ikrom.cinemahall.data.database.entity.PaymentEntity
+import tj.ikrom.cinemahall.data.database.entity.HistoryEntity
 
-class PaymentAdapter : ListAdapter<PaymentEntity, PaymentAdapter.PaymentViewHolder>(DiffCallback) {
+class HistoryAdapter : ListAdapter<HistoryEntity, HistoryAdapter.PaymentViewHolder>(DiffCallback) {
 
-    object DiffCallback : DiffUtil.ItemCallback<PaymentEntity>() {
-        override fun areItemsTheSame(oldItem: PaymentEntity, newItem: PaymentEntity) =
+    object DiffCallback : DiffUtil.ItemCallback<HistoryEntity>() {
+        override fun areItemsTheSame(oldItem: HistoryEntity, newItem: HistoryEntity) =
             oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: PaymentEntity, newItem: PaymentEntity) =
+        override fun areContentsTheSame(oldItem: HistoryEntity, newItem: HistoryEntity) =
             oldItem == newItem
     }
 

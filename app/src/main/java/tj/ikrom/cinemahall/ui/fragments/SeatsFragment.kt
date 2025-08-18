@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import tj.ikrom.cinemahall.R
-import tj.ikrom.cinemahall.data.database.entity.PaymentEntity
+import tj.ikrom.cinemahall.data.database.entity.HistoryEntity
 import tj.ikrom.cinemahall.data.network.model.Seat
 import tj.ikrom.cinemahall.ui.adapter.SeatsAdapter
 import tj.ikrom.cinemahall.ui.viewmodel.SeatsViewModel
@@ -108,14 +108,14 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
                 return@setOnClickListener
             }
 
-            val paymentEntity = PaymentEntity(
+            val historyEntity = HistoryEntity(
                 cinemaName = theaterNameText.text.toString(),
                 hall = hallNameText.text.toString(),
                 seats = selectedSeats.toList(),
                 totalPrice = totalPriceText.text.toString(),
             )
 
-            viewModel.insertPayment(paymentEntity)
+            viewModel.insertPayment(historyEntity)
 
             // Навигация через кнопку
             val navController = Navigation.findNavController(view)

@@ -7,7 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import tj.ikrom.cinemahall.data.database.entity.PaymentEntity
+import tj.ikrom.cinemahall.data.database.entity.HistoryEntity
 import tj.ikrom.cinemahall.data.network.model.SeatsResponse
 import tj.ikrom.cinemahall.domain.repositories.SeatsRep
 import javax.inject.Inject
@@ -27,10 +27,10 @@ class SeatsViewModel @Inject constructor(
         }
     }
 
-    fun insertPayment(paymentEntity: PaymentEntity) {
+    fun insertPayment(historyEntity: HistoryEntity) {
         viewModelScope.launch {
             try {
-                seatsRep.insertPayment(paymentEntity)
+                seatsRep.insertHistory(historyEntity)
             } catch (e: Exception) {
                 Log.e("SeatsViewModel", "Error inserting payment: ${e.localizedMessage}")
             }

@@ -5,7 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import tj.ikrom.cinemahall.data.database.dao.PaymentDao
+import tj.ikrom.cinemahall.data.database.dao.HistoryDao
 import tj.ikrom.cinemahall.data.network.api.Api
 import tj.ikrom.cinemahall.data.network.repositories.SeatsRepImpl
 import tj.ikrom.cinemahall.domain.repositories.SeatsRep
@@ -18,7 +18,7 @@ object RepModule {
     @ViewModelScoped
     fun provideSeatsRepository(
         api: Api,
-        paymentDao: PaymentDao,
-    ) : SeatsRep = SeatsRepImpl(api, paymentDao)
+        historyDao: HistoryDao,
+    ) : SeatsRep = SeatsRepImpl(api, historyDao)
 
 }

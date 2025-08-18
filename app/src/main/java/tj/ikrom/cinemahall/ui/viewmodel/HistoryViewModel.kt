@@ -8,32 +8,32 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import tj.ikrom.cinemahall.data.database.entity.PaymentEntity
+import tj.ikrom.cinemahall.data.database.entity.HistoryEntity
 import tj.ikrom.cinemahall.domain.repositories.SeatsRep
 import javax.inject.Inject
 
 
 @HiltViewModel
-class PaymentViewModel @Inject constructor(
+class HistoryViewModel @Inject constructor(
     private val seatsRep: SeatsRep
 ) : ViewModel() {
 
-    private val _allPayments = MutableStateFlow<List<PaymentEntity>>(emptyList())
-    val allPayments: StateFlow<List<PaymentEntity>> = _allPayments
+    private val _allHistories = MutableStateFlow<List<HistoryEntity>>(emptyList())
+    val allHistories: StateFlow<List<HistoryEntity>> = _allHistories
 
     init {
         viewModelScope.launch {
-            seatsRep.getAllPayment()
+            seatsRep.getAllHistory()
                 .collect { payments ->
-                    _allPayments.value = payments
+                    _allHistories.value = payments
                 }
         }
     }
 
-    fun deletePayment(paymentEntity: List<PaymentEntity>) {
+    fun deletePayment(historyEntity: List<HistoryEntity>) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                seatsRep.deletePayment(paymentEntity)
+                seatsRep.deleteHistory(historyEntity)
             }
         }
     }

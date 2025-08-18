@@ -16,7 +16,7 @@ object DbModule {
     @Provides
     @ViewModelScoped
     fun providePaymentConditionDao(appDatabase: AppDatabase) =
-        appDatabase.paymentDao()
+        appDatabase.historyDao()
 
 
     @Provides

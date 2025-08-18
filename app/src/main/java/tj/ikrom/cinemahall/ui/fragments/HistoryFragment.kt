@@ -17,21 +17,21 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import tj.ikrom.cinemahall.R
-import tj.ikrom.cinemahall.data.database.entity.PaymentEntity
-import tj.ikrom.cinemahall.ui.adapter.PaymentAdapter
-import tj.ikrom.cinemahall.ui.viewmodel.PaymentViewModel
+import tj.ikrom.cinemahall.data.database.entity.HistoryEntity
+import tj.ikrom.cinemahall.ui.adapter.HistoryAdapter
+import tj.ikrom.cinemahall.ui.viewmodel.HistoryViewModel
 
 @AndroidEntryPoint
-class PaymentFragment : Fragment(R.layout.fragment_payment) {
+class HistoryFragment : Fragment(R.layout.fragment_history) {
 
-    private val viewModel: PaymentViewModel by viewModels()
+    private val viewModel: HistoryViewModel by viewModels()
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var cinemaName: TextView
     private lateinit var hallName: TextView
     private lateinit var tranche: TextView
     private lateinit var clearTranche: TextView
-    private lateinit var adapter: PaymentAdapter
+    private lateinit var adapter: HistoryAdapter
     private lateinit var homeButton: Button
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,7 +39,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
 
         recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = PaymentAdapter()
+        adapter = HistoryAdapter()
         recyclerView.adapter = adapter
         cinemaName = view.findViewById(R.id.theaterName)
         hallName = view.findViewById(R.id.hallName)
@@ -57,7 +57,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allPayments.collect { payments: List<PaymentEntity> ->
+                viewModel.allHistories.collect { payments: List<HistoryEntity> ->
                     if (payments.isNotEmpty()) {
                         // можно взять данные из первого платежа для заголовков
                         cinemaName.text = payments.first().cinemaName

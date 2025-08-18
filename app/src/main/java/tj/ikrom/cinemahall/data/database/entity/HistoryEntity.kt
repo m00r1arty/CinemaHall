@@ -6,8 +6,8 @@ import androidx.room.TypeConverters
 import tj.ikrom.cinemahall.data.database.entity.converter.PaymentConverter
 import tj.ikrom.cinemahall.data.network.model.Seat
 
-@Entity(tableName = "payment")
-data class PaymentEntity(
+@Entity(tableName = "history")
+data class HistoryEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val cinemaName: String,
     val hall: String,
