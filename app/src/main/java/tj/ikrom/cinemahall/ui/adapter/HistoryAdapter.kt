@@ -2,6 +2,7 @@ package tj.ikrom.cinemahall.ui.adapter
 
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -34,6 +35,9 @@ class HistoryAdapter : ListAdapter<HistoryEntity, HistoryAdapter.PaymentViewHold
     override fun onBindViewHolder(holder: PaymentViewHolder, position: Int) {
         val payment = getItem(position)
         val seatsText = payment.seats.joinToString("\n") { it.objectDescription.toString() }
-        holder.textView.text = "Сумма: ${payment.totalPrice} | Места:\n$seatsText"
+        holder.textView.apply {
+            setTextColor(ContextCompat.getColor(context, android.R.color.white))
+            text = "Сумма: ${payment.totalPrice} | Места:\n$seatsText"
+        }
     }
 }

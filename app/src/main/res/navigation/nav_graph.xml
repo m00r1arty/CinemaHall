@@ -12,16 +12,30 @@
         <action
             android:id="@+id/action_seats_to_payment"
             app:destination="@id/paymentFragment" />
+        <action
+            android:id="@+id/action_seats_to_history"
+            app:destination="@id/historyFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/paymentFragment"
-        android:name="tj.ikrom.cinemahall.ui.fragments.HistoryFragment"
+        android:name="tj.ikrom.cinemahall.ui.fragments.PaymentFragment"
         android:label="Payment">
         <action
             android:id="@+id/action_payment_to_seats"
+            app:destination="@id/historyFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="tj.ikrom.cinemahall.ui.fragments.HistoryFragment"
+        android:label="Payment">
+        <action
+            android:id="@+id/action_history_to_seats"
             app:destination="@id/seatsFragment" />
     </fragment>
+
+
 
 
 </navigation>

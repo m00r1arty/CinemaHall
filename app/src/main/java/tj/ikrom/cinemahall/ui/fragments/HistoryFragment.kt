@@ -70,7 +70,7 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
         }
         homeButton.setOnClickListener {
             val navController = Navigation.findNavController(view)
-            navController.navigate(R.id.action_payment_to_seats)
+            navController.navigate(R.id.action_history_to_seats)
         }
     }
 }

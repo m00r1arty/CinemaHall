@@ -99,7 +99,7 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
         viewModel.loadSeats()
         historyButton.setOnClickListener {
             val navController = Navigation.findNavController(view)
-            navController.navigate(R.id.action_seats_to_payment)
+            navController.navigate(R.id.action_seats_to_history)
         }
 
         payButton.setOnClickListener {
@@ -119,7 +119,7 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
 
             // Навигация через кнопку
             val navController = Navigation.findNavController(view)
-            navController.navigate(R.id.action_seats_to_payment)
+            navController.navigate(R.id.action_seats_to_history)
         }
     }
 
