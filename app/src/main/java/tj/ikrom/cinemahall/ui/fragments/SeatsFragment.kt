@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.otaliastudios.zoom.ZoomLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import tj.ikrom.cinemahall.R
@@ -25,43 +26,44 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
 
     private val viewModel: SeatsViewModel by activityViewModels()
 
+    private lateinit var seatsRecyclerView: RecyclerView
+    private lateinit var seatsAdapter: SeatsAdapter
+    private lateinit var zoomLayout: ZoomLayout
+
+    private val maxSelectionPlace = 5
+    private val selectedSeats = mutableSetOf<Seat>()
+    private val pricesMap = mutableMapOf("VIP" to 0, "COMFORT" to 0, "STANDARD" to 0)
+
+    private lateinit var bottomPanel: View
     private lateinit var totalPriceText: TextView
     private lateinit var payButton: Button
     private lateinit var historyButton: Button
-    private lateinit var bottomPanel: View
+
     private lateinit var theaterNameText: TextView
     private lateinit var hallNameText: TextView
     private lateinit var freeSeatsCountText: TextView
     private lateinit var statusCinemaText: TextView
-    private lateinit var seatsRecyclerView: RecyclerView
 
     private lateinit var vipPriceView: TextView
     private lateinit var comfortPriceView: TextView
     private lateinit var standardPriceView: TextView
 
-    private val maxSelectionPlace = 5
-    private val selectedSeats = mutableSetOf<Seat>()
-
-    private val pricesMap: MutableMap<String, Int> = mutableMapOf(
-        "VIP" to 0,
-        "COMFORT" to 0,
-        "STANDARD" to 0
-    )
-
-    private lateinit var seatsAdapter: SeatsAdapter
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        theaterNameText = view.findViewById(R.id.theaterName)
-        statusCinemaText = view.findViewById(R.id.statusCinema)
-        hallNameText = view.findViewById(R.id.hallName)
-        freeSeatsCountText = view.findViewById(R.id.freeSeatsCount)
+        zoomLayout = view.findViewById(R.id.zoom)
+        zoomLayout.setHasClickableChildren(true) // ВАЖНО
+
+        seatsRecyclerView = view.findViewById(R.id.seatsRecyclerView)
+        bottomPanel = view.findViewById(R.id.bottomPanel)
         totalPriceText = view.findViewById(R.id.totalPrice)
         payButton = view.findViewById(R.id.payButton)
         historyButton = view.findViewById(R.id.historyButton)
-        bottomPanel = view.findViewById(R.id.bottomPanel)
-        seatsRecyclerView = view.findViewById(R.id.seatsRecyclerView)
+
+        theaterNameText = view.findViewById(R.id.theaterName)
+        hallNameText = view.findViewById(R.id.hallName)
+        freeSeatsCountText = view.findViewById(R.id.freeSeatsCount)
+        statusCinemaText = view.findViewById(R.id.statusCinema)
 
         vipPriceView = view.findViewById(R.id.vip_price)
         comfortPriceView = view.findViewById(R.id.comfort_price)
@@ -77,29 +79,24 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
 
                     theaterNameText.text = "Кинотеатр \"NullPointer\""
                     hallNameText.text = response.hallName
-                    freeSeatsCountText.text = "Свободных мест: ${
-                        response.seats?.count { it.bookedSeats == 0 } ?: 0
-                    }"
+                    freeSeatsCountText.text =
+                        "Свободных мест: ${response.seats?.count { it.bookedSeats == 0 } ?: 0}"
                     statusCinemaText.text = response.hasStartedText
 
                     response.seatsType?.forEach { seatType ->
-                        seatType.seatType?.let { type ->
-                            seatType.price?.let { price ->
-                                pricesMap[type] = price
-                            }
-                        }
+                        pricesMap[seatType.seatType ?: ""] = seatType.price ?: 0
                     }
                     updatePriceViews()
-
                     response.seats?.let { updateSeats(it) }
                 }
             }
         }
 
         viewModel.loadSeats()
+
         historyButton.setOnClickListener {
-            val navController = Navigation.findNavController(view)
-            navController.navigate(R.id.action_seats_to_history)
+            Navigation.findNavController(view)
+                .navigate(R.id.action_seats_to_history)
         }
 
         payButton.setOnClickListener {
@@ -113,19 +110,15 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
                 seats = selectedSeats.toList(),
                 totalPrice = totalPriceText.text.toString(),
             )
-
             viewModel.selectPayment(historyEntity)
-
-            // Навигация через кнопку
-            val navController = Navigation.findNavController(view)
-            navController.navigate(R.id.action_seats_to_payment)
+            Navigation.findNavController(view)
+                .navigate(R.id.action_seats_to_payment)
         }
     }
 
     private fun setupRecyclerView() {
-        seatsAdapter = SeatsAdapter(emptyList()) { seat: Seat ->
+        seatsAdapter = SeatsAdapter(emptyList()) { seat ->
             onSeatClicked(seat)
-            Log.i("Selected Seats", selectedSeats.toString())
         }
         seatsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         seatsRecyclerView.adapter = seatsAdapter
@@ -152,11 +145,11 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
             }
             sortedSeats.addAll(sortedRow)
         }
-
         seatsAdapter.updateData(sortedSeats)
     }
 
     private fun onSeatClicked(seat: Seat) {
+        if (seat.rowNum == null) return // пустая ячейка
         if (selectedSeats.contains(seat)) {
             selectedSeats.remove(seat)
         } else {
@@ -178,14 +171,8 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
             bottomPanel.visibility = View.GONE
         } else {
             bottomPanel.visibility = View.VISIBLE
-            val totalPrice = selectedSeats.sumOf { seat ->
-                pricesMap[seat.seatType] ?: 0
-            }
+            val totalPrice = selectedSeats.sumOf { pricesMap[it.seatType] ?: 0 }
             totalPriceText.text = "Итого: $totalPrice сомони"
         }
-    }
-
-    private fun openPaymentScreen() {
-        Toast.makeText(requireContext(), "Открываем оплату", Toast.LENGTH_SHORT).show()
     }
 }

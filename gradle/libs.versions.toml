@@ -23,6 +23,7 @@ hiltCompiler = "1.2.0"
 chucker-library = "4.0.0"
 nav-version = "2.9.3"
 room_version = "2.7.2"
+zoomlayout = "1.9.0"
 
 
 [libraries]
@@ -68,6 +69,7 @@ room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room_version" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room_version" }
 
+zoomlayout = { group = "com.otaliastudios", name = "zoomlayout", version.ref = "zoomlayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

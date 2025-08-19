@@ -82,6 +82,5 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
                 }
             }
         }
-
     }
 }
