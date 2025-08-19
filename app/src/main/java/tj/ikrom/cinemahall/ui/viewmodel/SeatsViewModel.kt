@@ -19,6 +19,13 @@ class SeatsViewModel @Inject constructor(
     private val _seats = MutableStateFlow<SeatsResponse?>(null)
     val seats: StateFlow<SeatsResponse?> = _seats
 
+    private val _selectedPayment = MutableStateFlow<HistoryEntity?>(null)
+    val selectedPayment: StateFlow<HistoryEntity?> = _selectedPayment
+
+    fun selectPayment(payment: HistoryEntity?) {
+        _selectedPayment.value = payment
+    }
+
     fun loadSeats() {
         viewModelScope.launch {
             seatsRep.getSeats().collect { response ->

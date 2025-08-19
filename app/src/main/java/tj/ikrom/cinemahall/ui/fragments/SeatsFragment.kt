@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
@@ -23,7 +23,7 @@ import tj.ikrom.cinemahall.ui.viewmodel.SeatsViewModel
 @AndroidEntryPoint
 class SeatsFragment : Fragment(R.layout.fragment_seats) {
 
-    private val viewModel: SeatsViewModel by viewModels()
+    private val viewModel: SeatsViewModel by activityViewModels()
 
     private lateinit var totalPriceText: TextView
     private lateinit var payButton: Button
@@ -107,7 +107,6 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
                 Toast.makeText(requireContext(), "Сначала выберите места", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
             val historyEntity = HistoryEntity(
                 cinemaName = theaterNameText.text.toString(),
                 hall = hallNameText.text.toString(),
@@ -115,11 +114,11 @@ class SeatsFragment : Fragment(R.layout.fragment_seats) {
                 totalPrice = totalPriceText.text.toString(),
             )
 
-            viewModel.insertPayment(historyEntity)
+            viewModel.selectPayment(historyEntity)
 
             // Навигация через кнопку
             val navController = Navigation.findNavController(view)
-            navController.navigate(R.id.action_seats_to_history)
+            navController.navigate(R.id.action_seats_to_payment)
         }
     }
 

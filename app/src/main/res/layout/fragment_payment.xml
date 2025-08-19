@@ -1,10 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_payment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.PaymentFragment">
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/infoCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/infoPanel"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSurface"
+            android:elevation="4dp">
+
+            <TextView
+                android:id="@+id/payment"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Оплатить"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/theaterName"
+                app:layout_constraintTop_toBottomOf="@id/payment"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Имя Кинотеатра"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/hallName"
+                app:layout_constraintTop_toBottomOf="@id/theaterName"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Зал 1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:text="Список платежей"
+        android:paddingTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/infoCardView"
+        android:textSize="18sp"
+        android:paddingBottom="8dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toTopOf="@+id/payButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textTitle"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/payButton"
+        app:layout_constraintCircleRadius="12dp"
+        android:background="@color/primaryGray"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Забронировать" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
