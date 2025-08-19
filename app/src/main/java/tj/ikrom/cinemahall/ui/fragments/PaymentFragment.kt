@@ -57,19 +57,19 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.selectedPayment.collect { payments: HistoryEntity? ->
-                    payments?.let { payments ->
+                    payments?.let { payment ->
                         // можно взять данные из первого платежа для заголовков
-                        cinemaName.text = payments.cinemaName
-                        hallName.text = payments.hall
+                        cinemaName.text = payment.cinemaName
+                        hallName.text = payment.hall
 
-                        Log.i("Payment", payments.toString())
-                        adapter.submitList(payments.seats)
+                        Log.i("Payment", payment.toString())
+                        adapter.submitList(payment.seats)
 
                         val historyEntity = HistoryEntity(
-                            cinemaName = payments.cinemaName,
-                            hall = payments.hall,
-                            seats = payments.seats.toList(),
-                            totalPrice = payments.totalPrice,
+                            cinemaName = payment.cinemaName,
+                            hall = payment.hall,
+                            seats = payment.seats.toList(),
+                            totalPrice = payment.totalPrice,
                         )
 
                         payButton.setOnClickListener {
